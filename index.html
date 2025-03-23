@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Webhook</title>
-</head>
-<body>
-    <h2>Click the button to send a webhook with a timestamp</h2>
-    <button onclick="sendWebhook()">Send Webhook</button>
-
+    <title>Webhook Auto-Sender</title>
     <script>
-        function sendWebhook() {
+        window.onload = function() {
             const timestamp = new Date().toISOString();
             const webhookUrl = `https://hooks.zapier.com/hooks/catch/22170888/2e9wnb3/?timestamp=${encodeURIComponent(timestamp)}`;
-            window.location.href = webhookUrl;}
+            window.location.href = webhookUrl;
+        };
     </script>
+</head>
+<body>
+    <h2>Sending Webhook...</h2>
+    <p>If nothing happens, make sure pop-ups and redirects are allowed.</p>
 </body>
 </html>
