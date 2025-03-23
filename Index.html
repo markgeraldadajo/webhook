@@ -3,18 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Webhook</title>
-</head>
-<body>
-    <h2>Click the button to send a webhook with a timestamp</h2>
-    <button onclick="sendWebhook()">Send Webhook</button>
-
+    <title>Enter Your Name</title>
     <script>
         function sendWebhook() {
+            const name = prompt("Please enter your name:");
+            if (!name) {
+                alert("Name is required to proceed.");
+                return;
+            }
+
             const timestamp = new Date().toISOString();
-            const webhookUrl = `https://hooks.zapier.com/hooks/catch/22170888/2e9wnb3/?timestamp=${encodeURIComponent(timestamp)}`;
-            window.location.href = webhookUrl;
+            const webhookUrl = `https://hooks.zapier.com/hooks/catch/22170888/2e9wnb3/?timestamp=${encodeURIComponent(timestamp)}&name=${encodeURIComponent(name)}`;
+
+            fetch(webhookUrl)
+                .then(response => {
+                    document.body.innerHTML = `<h2>Thank you, ${name}! Your entry has been recorded.</h2>`;
+                })
+                .catch(error => {
+                    document.body.innerHTML = "<h2>Error Sending Webhook</h2>";
+                    console.error("Error:", error);
+                });
         }
+
+        window.onload = sendWebhook;
     </script>
+</head>
+<body>
+    <h2>Recording your entry...</h2>
+    <p>If you do not see a prompt, please allow pop-ups.</p>
 </body>
 </html>
