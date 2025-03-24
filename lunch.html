@@ -12,11 +12,23 @@
                 return;
             }
 
+            // Get local time in UTC+8
             const now = new Date();
-            const taiwanOffset = 8 * 60 * 60 * 1000; // UTC+8 in milliseconds
-            const taiwanTime = new Date(now.getTime() + taiwanOffset).toISOString().slice(0, 19); // Remove milliseconds
+            const taiwanTime = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Asia/Taipei',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            }).format(now).replace(',', '');
 
-            const webhookUrl = `https://hooks.zapier.com/hooks/catch/22170888/2e5zi3e/?timestamp=${encodeURIComponent(taiwanTime)}&name=${encodeURIComponent(name)}`;
+            // Convert to Google Sheets-friendly format (YYYY-MM-DD HH:MM:SS)
+            const formattedTime = taiwanTime.replace(/\//g, '-');
+
+            const webhookUrl = `https://hooks.zapier.com/hooks/catch/22170888/2e5zi3e/?timestamp=${encodeURIComponent(formattedTime)}&name=${encodeURIComponent(name)}`;
 
             fetch(webhookUrl)
                 .then(response => {
