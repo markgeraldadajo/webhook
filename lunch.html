@@ -12,8 +12,11 @@
                 return;
             }
 
-            const timestamp = new Date().toISOString();
-            const webhookUrl = `https://hooks.zapier.com/hooks/catch/22170888/2e5zi3e/?timestamp=${encodeURIComponent(timestamp)}&name=${encodeURIComponent(name)}`;
+            const now = new Date();
+            const taiwanOffset = 8 * 60 * 60 * 1000; // UTC+8 in milliseconds
+            const taiwanTime = new Date(now.getTime() + taiwanOffset).toISOString().slice(0, 19); // Remove milliseconds
+
+            const webhookUrl = `https://hooks.zapier.com/hooks/catch/22170888/2e5zi3e/?timestamp=${encodeURIComponent(taiwanTime)}&name=${encodeURIComponent(name)}`;
 
             fetch(webhookUrl)
                 .then(response => {
