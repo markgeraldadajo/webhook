@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Your Name</title>
+    <script>
+        function sendWebhook() {
+            const name = prompt("Please enter your name:");
+            if (!name) {
+                alert("Name is required to proceed.");
+                return;
+            }
+
+            // Get local time in UTC+8
+            const now = new Date();
+            const taiwanTime = new Intl.DateTimeFormat('en-CA', {
+                timeZone: 'Asia/Taipei',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            }).format(now).replace(',', '');
+
+            // Convert to Google Sheets-friendly format (YYYY-MM-DD HH:MM:SS)
+            const formattedTime = taiwanTime.replace(/\//g, '-');
+
+            const webhookUrl = `https://hooks.zapier.com/hooks/catch/22170888/2ewjna9/?timestamp=${encodeURIComponent(formattedTime)}&name=${encodeURIComponent(name)}`;
+
+            fetch(webhookUrl)
+                .then(response => {
+                    document.body.innerHTML = `<h2>Thank you, ${name}! <p> Have a great shift!</p> </h2>`;
+                })
+                .catch(error => {
+                    document.body.innerHTML = "<h2>Error Sending Webhook</h2>";
+                    console.error("Error:", error);
+                });
+        }
+
+        window.onload = sendWebhook;
+    </script>
+</head>
+<body>
+    <h2>Recording your entry...</h2>
+    <p>If you do not see a prompt, please allow pop-ups.</p>
+</body>
+</html>
